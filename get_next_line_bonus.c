@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sadinc <sadinc@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 18:22:33 by sadinc            #+#    #+#             */
-/*   Updated: 2024/12/07 18:24:08 by sadinc           ###   ########.fr       */
+/*   Updated: 2024/12/07 18:26:15 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <unistd.h>
 
 static char	*ft_next_line(char *remainder)
@@ -88,17 +88,17 @@ static char	*ft_reader(int fd, char *remainder)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*remainder;
+	static char	*remainder[4096];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
-		free(remainder);
+		free(remainder[fd]);
 		return (NULL);
 	}
-	remainder = ft_reader(fd, remainder);
-	if (!remainder)
+	remainder[fd] = ft_reader(fd, remainder[fd]);
+	if (!remainder[fd])
 		return (NULL);
-	line = ft_get_line(remainder);
-	remainder = ft_next_line(remainder);
+	line = ft_get_line(remainder[fd]);
+	remainder[fd] = ft_next_line(remainder[fd]);
 	return (line);
 }
